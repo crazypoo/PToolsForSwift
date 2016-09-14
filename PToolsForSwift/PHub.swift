@@ -22,28 +22,40 @@ class PHub: NSObject {
     
     class func hide()
     {
-        hubWindow().rootViewController?.perform(#selector(PHubViewController.hide(completion:)), with: {
-          hubWindow().isHidden = true
-//            setHubWindow(hubWindow: nil)
-            UIApplication.shared.keyWindow?.makeKey()
-        })
+//        hubWindow().rootViewController?.performSelector(inBackground: #selector(PHubViewController.hide(completion:)), with: {
+//            hubWindow().isHidden = true
+//            let a = PHubWindow()
+//            setHubWindow(hubWindow: a)
+//            UIApplication.shared.keyWindow?.makeKey()
+//        })
     }
     
     class func setColors(colors:NSArray)
     {
-        let isLegal = true
-        if let object as AnyObject in colors
-        {
-            if object {
-                <#code#>
+        var isLegal = true
+        for objects: Any in colors {
+            if (objects as AnyObject).isKind(of: UIColor.superclass()!)
+            {
+                isLegal = false
+                break
+            }
+
+            if colors.count > 1 && isLegal == true
+            {
+                setHubColors(hubColors: colors)
+            }
+            else
+            {
+                NSLog("填入的顏色不被採用, 建議要填入兩個以上的顏色, 或是元素不合法.")
             }
         }
-        
     }
     
     class func resetDefultSetting()
     {
-        
+        PHub.setColors(colors: [UIColor.red, UIColor.yellow, UIColor.blue, UIColor.green, UIColor.white])
+        PHub.setHubBackgroundColor(hubBackgroundColor: UIColor.init(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.75))
+        PHub.setHubLineWidth(hudLineWidth: 2)
     }
     
     class func setHubWindow(hubWindow:PHubWindow)
@@ -81,11 +93,11 @@ class PHub: NSObject {
     
     class func hubBackgroundColor()->UIColor
     {
-        if objc_getAssociatedObject(self, #function) == nil
+        if objc_getAssociatedObject(self, NSStringFromSelector(#function)) == nil
         {
             setHubBackgroundColor(hubBackgroundColor: UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.65))
         }
-        return objc_getAssociatedObject(self, #function) as! UIColor
+        return objc_getAssociatedObject(self, NSStringFromSelector(#function)) as! UIColor
     }
     
     class func setHubLineWidth(hudLineWidth:CGFloat)

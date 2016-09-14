@@ -10,11 +10,23 @@ import UIKit
 
 extension UIColor
 {
-    func colorWithHex(hexString:String)->UIColor
+    func colorWithHex(hexString:NSString)->UIColor
     {
-        return UIColor.init(red: CGFloat(((Int(hexString)! & 0xFF0000) >> 16)/255), green: CGFloat(((Int(hexString)! & 0xFF00) >> 8)/255), blue: CGFloat((Int(hexString)! & 0xFF)/255), alpha: 1)
+        var Str = hexString.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
+        if hexString.hasPrefix("#")
+        {
+            Str = ((hexString as NSString).substring(from: 1) as NSString) as String
+        }
+        let Red = (Str as NSString ).substring(to: 2)
+        let Green = ((Str as NSString).substring(from: 2) as NSString).substring(to: 2)
+        let Blue = ((Str as NSString).substring(from: 4) as NSString).substring(to: 2)
+        var r:CUnsignedInt = 0, g:CUnsignedInt = 0, b:CUnsignedInt = 0;
+        Scanner(string:Red).scanHexInt32(&r)
+        Scanner(string: Green).scanHexInt32(&g)
+        Scanner(string: Blue).scanHexInt32(&b)
+        return UIColor(red: CGFloat(r)/255.0, green: CGFloat(g)/255.0, blue: CGFloat(b)/255.0, alpha: 1)
     }
-    
+
     func RGBColor(r:CGFloat,g:CGFloat,b:CGFloat)->UIColor
     {
         return UIColor.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
@@ -27,11 +39,11 @@ extension UIColor
     
     func randomColor()->UIColor
     {
-        return UIColor.init(red: CGFloat(arc4random_uniform(256)/255), green: CGFloat(arc4random_uniform(256)/255), blue: CGFloat(arc4random_uniform(256)/255), alpha: 1)
+        return UIColor.init(red: CGFloat(CGFloat(arc4random())/CGFloat(RAND_MAX)), green: CGFloat(CGFloat(arc4random())/CGFloat(RAND_MAX)), blue: CGFloat(CGFloat(arc4random())/CGFloat(RAND_MAX)), alpha: 1)
     }
     
     func randomColorWithAlpha(alpha:CGFloat)->UIColor
     {
-        return UIColor.init(red: CGFloat(arc4random_uniform(256)/255), green: CGFloat(arc4random_uniform(256)/255), blue: CGFloat(arc4random_uniform(256)/255), alpha: alpha)
+        return UIColor.init(red: CGFloat(CGFloat(arc4random())/CGFloat(RAND_MAX)), green: CGFloat(CGFloat(arc4random())/CGFloat(RAND_MAX)), blue: CGFloat(CGFloat(arc4random())/CGFloat(RAND_MAX)), alpha: alpha)
     }
 }
